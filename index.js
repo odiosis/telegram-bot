@@ -3,6 +3,7 @@ require('dotenv').config()
 const bot = require('./lib/bot')
 
 bot
+  .install(require('./features/help'))
   .install(require('./features/bilibili'))
   .catch(err => {
     console.log(err)
