@@ -8,4 +8,4 @@ const help = bot => {
   `))
 }
 
-module.exports = bilibili
+module.exports = help
