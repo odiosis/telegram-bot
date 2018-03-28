@@ -31,6 +31,7 @@
     "axios": "^0.18.0",
     "dotenv": "^5.0.1",
     "pm2": "^2.10.1",
+    "query-string": "^6.0.0",
     "telegraf": "^3.20.0"
   },
   "devDependencies": {
