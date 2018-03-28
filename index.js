@@ -9,7 +9,6 @@ const axios = Axios.create({
 })
 
 bot.command('/pics', async ctx => {
-  console.log(`Fetching Start`)
   const message = ctx.message.text.trim().toLowerCase()
   let num = 0
   try {
@@ -31,7 +30,7 @@ bot.command('/pics', async ctx => {
     }
   })
 
-  ctx.replyWithMediaGroup(media)
+  ctx.replyWithMediaGroup(media.splice(0, 10))
 })
 
 bot.catch(err => {

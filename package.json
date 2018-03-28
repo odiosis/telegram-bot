@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "pm2 start index.js",
     "stop": "pm2 delete all"
   },
@@ -31,5 +32,8 @@
     "dotenv": "^5.0.1",
     "pm2": "^2.10.1",
     "telegraf": "^3.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
   }
 }
