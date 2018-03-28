@@ -21,7 +21,7 @@ const getEden = async (ctx, Area, category) => {
   const message = ctx.message.text.trim().toLowerCase()
   let num = 0
   try {
-    num = message.match(new RegExp(`^\/${category}\s+([0-9]+)$`))[1]
+    num = message.match(new RegExp(`^\/${category}\\s+([0-9]+)$`))[1]
   } catch (e) {
     num = 0
   }
