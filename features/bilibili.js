@@ -21,17 +21,17 @@ const axios = Axios.create({
   }
 })
 
-const handleMessage = msg => {
+const handleMessage = (msg, category) => {
   const message = msg.text.trim().toLowerCase()
   const matchedMessage = message.match(new RegExp(`^\/${category}\\s+([0-9]+)$`))
-  const num = matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
+  return matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
 }
 
 const getEden = async (ctx, area, category) => {
   const query = queryString.stringify({
     category,
     type: 'new',
-    page_num: handleMessage(ctx.message),
+    page_num: handleMessage(ctx.message, category),
     page_size: PAGE_SIZE
   })
 
