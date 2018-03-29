@@ -28,6 +28,8 @@ const handleMessage = (msg, category) => {
 }
 
 const getEden = async (ctx, area, category) => {
+  const num = handleMessage (ctx.message, category)
+
   const query = queryString.stringify({
     category,
     type: 'new',
