@@ -2,6 +2,9 @@ const queryString = require('query-string')
 const Axios = require('axios')
 const logger = require('../lib/logger')
 
+const MAX_PHOTOS = 9
+const PAGE_SIZE = 1
+
 const axios = Axios.create({
   baseURL: 'https://api.vc.bilibili.com/link_draw/v2',
   headers: {
@@ -18,22 +21,23 @@ const axios = Axios.create({
   }
 })
 
-const getEden = async (ctx, Area, category) => {
-  const message = ctx.message.text.trim().toLowerCase()
+const handleMessage = msg => {
+  const message = msg.text.trim().toLowerCase()
   const matchedMessage = message.match(new RegExp(`^\/${category}\\s+([0-9]+)$`))
   const num = matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
+}
 
+const getEden = async (ctx, area, category) => {
   const query = queryString.stringify({
     category,
     type: 'new',
-    page_num: num,
-    page_size: 1
+    page_num: handleMessage(ctx.message),
+    page_size: PAGE_SIZE
   })
 
-  logger.info(`Fetching: Bilibili -> ${Area} -> ${category} -> ${num}`)
-  const resp = await axios.get(`/${Area}/list?${query}`)
-  const { data } = resp.data
-  const { item, user } = data.items[0]
+  logger.info(`Fetching: Bilibili -> ${area} -> ${category} -> ${num}`)
+  const resp = await axios.get(`/${area}/list?${query}`)
+  const { item, user } = resp.data.data.items[0]
 
   const media = item.pictures.map(pic => {
     return {
@@ -43,8 +47,12 @@ const getEden = async (ctx, Area, category) => {
     }
   })
 
-  const replyer = await ctx.replyWithMediaGroup(media)
-  logger.success(`Reply: ${replyer.length} photos sended`)
+  ctx.reply(`[/${category} ${num}]Finding...`)
+  for (let i = 0, len = (media.length / MAX_PHOTOS); i < len; i ++) {
+    await ctx.replyWithMediaGroup(media.splice(i, MAX_PHOTOS, 0))
+  }
+  ctx.reply(`[/${category} ${num}]Done!`)
+  logger.success(`Reply: ${item.pictures.length} photos sended`)
 }
 
 const bilibili = bot => {
