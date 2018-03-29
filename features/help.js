@@ -1,3 +1,5 @@
+const logger = require('../lib/logger')
+
 const helper = `
 /helper: 获取帮助
 /cos [n]: 获取 b 站相簿 cosplay 区第 n 张新相片集
