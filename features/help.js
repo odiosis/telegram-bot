@@ -1,7 +1,7 @@
 const logger = require('../lib/logger')
 
 const helper = `
-/helper: 获取帮助
+/help: 获取帮助
 /cos [n]: 获取 b 站相簿 cosplay 区第 n 张新相片集
 /sifu [n]: 获取 b 站相簿私服区第 n 张新相片集
 /illust [n]: 获取 b 站相簿插画区第 n 张新相片集
