@@ -13,7 +13,7 @@ const helper = `
 const help = bot => {
   bot.command('/help', async ctx => {
     logger.info(`Fetching: Help`)
-    const replyer = await ctx.reply(helper)
+    await ctx.reply(helper)
     logger.success(`Reply: help list sended`)
   })
 }

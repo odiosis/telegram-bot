@@ -1,14 +1,13 @@
-const queryString = require('query-string')
 const Axios = require('axios')
 const logger = require('../lib/logger')
 
 const api = `http://data.gateio.io/api2/1/ticker`
 
-function getType(msg) {
+function getType (msg) {
   return msg.toLowerCase().split(' ')[1]
 }
 
-async function fetchDetail(type) {
+async function fetchDetail (type) {
   const { data } = await Axios.get(`${api}/${type}_usdt`)
 
   if (data.result === 'false') {
@@ -22,14 +21,14 @@ async function fetchDetail(type) {
   )}%`
 }
 
-module.exports = function(bot) {
+module.exports = function (bot) {
   bot.command('/coin', async ctx => {
     let type
 
     try {
       type = getType(ctx.message.text)
     } catch (error) {
-      reply('Oooops, parsing failed')
+      ctx.reply('Oooops, parsing failed')
       return
     }
 

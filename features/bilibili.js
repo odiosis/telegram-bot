@@ -23,12 +23,12 @@ const axios = Axios.create({
 
 const handleMessage = (msg, category) => {
   const message = msg.text.trim().toLowerCase()
-  const matchedMessage = message.match(new RegExp(`^\/${category}\\s+([0-9]+)$`))
+  const matchedMessage = message.match(new RegExp(`^/${category}\\s+([0-9]+)$`))
   return matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
 }
 
 const getEden = async (ctx, area, category) => {
-  const num = handleMessage (ctx.message, category)
+  const num = handleMessage(ctx.message, category)
 
   const query = queryString.stringify({
     category,
@@ -50,7 +50,7 @@ const getEden = async (ctx, area, category) => {
   })
 
   ctx.reply(`[/${category} ${num}]Finding...`)
-  for (let i = 0, len = (media.length / MAX_PHOTOS); i < len; i ++) {
+  for (let i = 0, len = (media.length / MAX_PHOTOS); i < len; i++) {
     await ctx.replyWithMediaGroup(media.splice(i, MAX_PHOTOS, 0))
   }
   ctx.reply(`[/${category} ${num}]Done!`)
@@ -59,7 +59,7 @@ const getEden = async (ctx, area, category) => {
 
 const bilibili = bot => {
   bot.command('/cos', ctx => getEden(ctx, 'Photo', 'cos'))
-  
+
   bot.command('/sifu', ctx => getEden(ctx, 'Photo', 'sifu'))
 
   bot.command('/illust', ctx => getEden(ctx, 'Doc', 'illustration'))

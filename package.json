@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
     "dev": "nodemon index.js",
     "start": "pm2 start index.js",
-    "stop": "pm2 delete all"
+    "stop": "pm2 delete all",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -21,7 +25,12 @@
     "email": "sonne@asaki.me",
     "url": "https://asaki.me"
   },
-  "contributors": [],
+  "contributors": [
+    {
+      "name": "Riokai",
+      "email": "zengkai2009@foxmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/odiosis/telegram-bot/issues"
@@ -37,6 +46,13 @@
     "telegraf": "^3.20.0"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-friendly-formatter": "^4.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "nodemon": "^1.17.2"
   }
 }
