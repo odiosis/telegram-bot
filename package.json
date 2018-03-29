@@ -29,7 +29,9 @@
   "homepage": "https://github.com/odiosis/telegram-bot#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "chalk": "^2.3.2",
     "dotenv": "^5.0.1",
+    "fecha": "^2.3.3",
     "pm2": "^2.10.1",
     "query-string": "^6.0.0",
     "telegraf": "^3.20.0"
