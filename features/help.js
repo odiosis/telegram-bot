@@ -10,12 +10,10 @@ const helper = `
 /coin [type]：获取 type 数字货币的实时信息
 `
 
-const help = bot => {
-  bot.command('/help', async ctx => {
-    logger.info(`Fetching: Help`)
-    await ctx.reply(helper)
-    logger.success(`Reply: help list sended`)
-  })
+const help = async ctx => {
+  logger.info(`Fetching: Help`)
+  await ctx.reply(helper)
+  logger.success(`Reply: help list sended`)
 }
 
 module.exports = help
