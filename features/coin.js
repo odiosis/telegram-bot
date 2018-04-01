@@ -1,7 +1,7 @@
 const Axios = require('axios')
 const logger = require('../lib/logger')
 
-const api = `http://data.gateio.io/api2/1/ticker`
+const api = `https://data.gateio.io/api2/1/ticker`
 
 function getType (msg) {
   return msg.toLowerCase().split(' ')[1]
