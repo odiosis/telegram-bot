@@ -27,6 +27,15 @@ const handleMessage = (msg, category) => {
   return matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
 }
 
+function createInlineKeyboard (m, item) {
+  return m.inlineKeyboard([
+    ...item.pictures.map((pic, index) => {
+      return m.callbackButton(`${index + 1}`, `${item.poster_uid}-${index}`)
+    })
+  ],
+  { columns: 3 })
+}
+
 const getEden = async (bot, ctx, area, category) => {
   const num = handleMessage(ctx.message, category)
 
@@ -41,29 +50,20 @@ const getEden = async (bot, ctx, area, category) => {
   const resp = await axios.get(`/${area}/list?${query}`)
   const { item, user } = resp.data.data.items[0]
 
-  function createInlineKeyboard (m) {
-    return m.inlineKeyboard([
-      ...item.pictures.map((pic, index) => {
-        return m.callbackButton(`${index + 1}`, index)
-      })
-    ],
-    { columns: 3 })
-  }
-
   const markup = Extra
     .HTML()
-    .markup(m => createInlineKeyboard(m))
+    .markup(m => createInlineKeyboard(m, item))
 
-  await ctx.reply(`<b>${user.name}</b> - ${item.title}`, markup)
-
+  // create router
   const router = new Router(({ callbackQuery }) => {
     if (!callbackQuery.data) return
     return {
       route: callbackQuery.data
     }
   })
+
   item.pictures.forEach((pic, index) => {
-    router.on(index.toString(), async ctx => {
+    router.on(`${item.poster_uid}-${index}`, async ctx => {
       const meta = ctx.update.callback_query.from
       const username = meta.username || (meta.first_name + meta.last_name)
       ctx.reply(`[/${category} ${num}]${username}: Finding... ${index + 1}`)
@@ -74,6 +74,9 @@ const getEden = async (bot, ctx, area, category) => {
       logger.success(`Reply: Bilibili -> ${area} -> ${category} -> ${num} -> ${index}`)
     })
   })
+
+  // send inline keyboard
+  await ctx.reply(`<b>${user.name}</b> - ${item.title}`, markup)
 
   bot.on('callback_query', router)
 }
