@@ -7,6 +7,7 @@ bot
   .install(require('./features/coin'))
   .install(require('./features/map'))
   .install(require('./features/translate'))
+  .install(require('./features/rss'))
   .catch(err => {
     console.log(err)
   })
