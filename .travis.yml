@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - "9"
+script: 
+  - unset CI
+  - npm run lint
