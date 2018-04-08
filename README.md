@@ -1,5 +1,7 @@
 # Telegram Bot
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/odiosis/telegram-bot.svg)](https://greenkeeper.io/)
+
 ![README 中文](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-blue.svg)
 
 > 致力于打造影响工作效率的电报机器人
