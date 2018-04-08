@@ -65,7 +65,7 @@ const getEden = async (bot, ctx, area, category) => {
   item.pictures.forEach((pic, index) => {
     router.on(`${item.poster_uid}-${index}`, async ctx => {
       const meta = ctx.update.callback_query.from
-      const username = meta.username || (meta.first_name + meta.last_name)
+      const username = meta.username || (meta.first_name || '' + meta.last_name || '')
       ctx.reply(`[/${category} ${num}]${username}: Finding... ${index + 1}`)
       logger.info(`Sending: Bilibili -> ${area} -> ${category} -> ${num} -> ${index}`)
       await ctx.replyWithPhoto({
