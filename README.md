@@ -18,6 +18,7 @@
 * `/map [location]` - 获取 location 的地图卡片
 * `/translate [text]` - 翻译 text
 * `/rss` - 获取预设博客的 rss
+* `/meme [text]` - 表情包 text
 
 ## 开发
 
