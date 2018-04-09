@@ -1,9 +1,9 @@
-
-const Extra = require('telegraf/extra')
-const Router = require('telegraf/router')
 const queryString = require('query-string')
 const Axios = require('axios')
 const logger = require('../lib/logger')
+
+const MAX_PHOTOS = 9
+const PAGE_SIZE = 1
 
 const axios = Axios.create({
   baseURL: 'https://api.vc.bilibili.com/link_draw/v2',
@@ -27,70 +27,46 @@ const handleMessage = (msg, category) => {
   return matchedMessage && matchedMessage.length > 1 ? matchedMessage[1] : 0
 }
 
-function createInlineKeyboard (m, item) {
-  return m.inlineKeyboard([
-    ...item.pictures.map((pic, index) => {
-      return m.callbackButton(`${index + 1}`, `${item.poster_uid}-${index}`)
-    })
-  ],
-  { columns: 3 })
-}
-
-const getEden = async (bot, ctx, area, category) => {
+const getEden = async (ctx, area, category) => {
   const num = handleMessage(ctx.message, category)
 
   const query = queryString.stringify({
     category,
     type: 'new',
     page_num: handleMessage(ctx.message, category),
-    page_size: 1
+    page_size: PAGE_SIZE
   })
 
   logger.info(`Fetching: Bilibili -> ${area} -> ${category} -> ${num}`)
   const resp = await axios.get(`/${area}/list?${query}`)
   const { item, user } = resp.data.data.items[0]
 
-  const markup = Extra
-    .HTML()
-    .markup(m => createInlineKeyboard(m, item))
-
-  // create router
-  const router = new Router(({ callbackQuery }) => {
-    if (!callbackQuery.data) return
+  const media = item.pictures.map(pic => {
     return {
-      route: callbackQuery.data
+      media: { url: pic.img_src },
+      caption: user.name + ' - ' + item.title,
+      type: 'photo'
     }
   })
 
-  item.pictures.forEach((pic, index) => {
-    router.on(`${item.poster_uid}-${index}`, async ctx => {
-      const meta = ctx.update.callback_query.from
-      const username = meta.username || (meta.first_name || '' + meta.last_name || '')
-      ctx.reply(`[/${category} ${num}]${username}: Finding... ${index + 1}`)
-      logger.info(`Sending: Bilibili -> ${area} -> ${category} -> ${num} -> ${index}`)
-      await ctx.replyWithPhoto({
-        url: pic.img_src
-      })
-      logger.success(`Reply: Bilibili -> ${area} -> ${category} -> ${num} -> ${index}`)
-    })
-  })
-
-  // send inline keyboard
-  await ctx.reply(`<b>${user.name}</b> - ${item.title}`, markup)
-
-  bot.on('callback_query', router)
+  ctx.reply(`[/${category} ${num}]Finding...`)
+  for (let i = 0, len = (media.length / MAX_PHOTOS); i < len; i++) {
+    await ctx.replyWithMediaGroup(media.splice(i, MAX_PHOTOS, 0))
+  }
+  ctx.reply(`[/${category} ${num}]Done!`)
+  logger.success(`Reply: ${item.pictures.length} photos sended`)
 }
 
 const bilibili = bot => {
-  bot.command('/cos', ctx => getEden(bot, ctx, 'Photo', 'cos'))
+  bot.command('/cos', ctx => getEden(ctx, 'Photo', 'cos'))
 
-  bot.command('/sifu', ctx => getEden(bot, ctx, 'Photo', 'sifu'))
+  bot.command('/sifu', ctx => getEden(ctx, 'Photo', 'sifu'))
 
-  bot.command('/illust', ctx => getEden(bot, ctx, 'Doc', 'illustration'))
+  bot.command('/illust', ctx => getEden(ctx, 'Doc', 'illustration'))
 
-  bot.command('/comic', ctx => getEden(bot, ctx, 'Doc', 'comic'))
+  bot.command('/comic', ctx => getEden(ctx, 'Doc', 'comic'))
 
-  bot.command('/draw', ctx => getEden(bot, ctx, 'Doc', 'draw'))
+  bot.command('/draw', ctx => getEden(ctx, 'Doc', 'draw'))
 }
 
 module.exports = bilibili

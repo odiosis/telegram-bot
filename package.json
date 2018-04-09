@@ -12,6 +12,9 @@
     "stop": "pm2 delete all",
     "lint": "eslint ."
   },
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/odiosis/telegram-bot.git"
@@ -45,6 +48,7 @@
     "google-translate-api": "^2.3.0",
     "pm2": "^2.10.2",
     "query-string": "^6.0.0",
+    "rss-parser": "^3.1.2",
     "telegraf": "^3.20.0"
   },
   "devDependencies": {
@@ -55,6 +59,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "pre-commit": "^1.2.2"
   }
 }

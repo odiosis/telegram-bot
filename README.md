@@ -1,5 +1,7 @@
 # Telegram Bot
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/odiosis/telegram-bot.svg)](https://greenkeeper.io/)
+
 ![README 中文](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-blue.svg)
 
 > 致力于打造影响工作效率的电报机器人
@@ -15,6 +17,7 @@
 * `/coin [type]` - 获取 type 数字货币的实时信息
 * `/map [location]` - 获取 location 的地图卡片
 * `/translate [text]` - 翻译 text
+* `/rss` - 获取预设博客的 rss
 * `/meme [text]` - 表情包 text
 
 ## 开发
