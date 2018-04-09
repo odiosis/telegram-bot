@@ -15,6 +15,7 @@
 * `/coin [type]` - 获取 type 数字货币的实时信息
 * `/map [location]` - 获取 location 的地图卡片
 * `/translate [text]` - 翻译 text
+* `/meme [text]` - 表情包 text
 
 ## 开发
 
