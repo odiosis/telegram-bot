@@ -3,15 +3,35 @@ const logger = require('../lib/logger')
 
 const api = `https://data.gateio.io/api2/1/ticker`
 
-function getType (msg) {
-  return msg.toLowerCase().split(' ')[1]
+function parseInput (ctx) {
+  const params = ctx.message.text.toLowerCase().split(' ')
+  console.log('params', params)
+  const len = params.length
+  const opts = { target: [], command: '' }
+
+  if (len === 2) {
+    const coins = params[1]
+
+    if (coins.includes(',') ||
+        coins.includes('，') ||
+        coins.includes('、')
+    ) {
+      opts.target = coins.split(/,|，|、/)
+    } else {
+      opts.target = [coins]
+    }
+  } else {
+    throw new Error('not supported syntax')
+  }
+
+  return opts
 }
 
 async function fetchDetail (type) {
   const { data } = await Axios.get(`${api}/${type}_usdt`)
 
   if (data.result === 'false') {
-    return data.message
+    return `${type}:\n${data.message}`
   }
 
   const { last, percentChange } = data
@@ -23,21 +43,34 @@ async function fetchDetail (type) {
 
 module.exports = function (bot) {
   bot.command('/coin', async ctx => {
-    let type
+    let input
 
     try {
-      type = getType(ctx.message.text)
+      input = parseInput(ctx)
     } catch (error) {
       ctx.reply('Oooops, parsing failed')
+      console.error(error)
       return
     }
 
-    logger.info(`Fetching: Coin -> ${type}`)
+    logger.info(`Fetching: Coin -> ${JSON.stringify(input)}`)
 
-    await ctx.reply(await fetchDetail(type), {
-      parse_mode: 'Markdown'
-    })
+    if (input.command) {
+      console.log(1)
+    } else {
+      let str = ''
 
-    logger.success(`Reply: coin -> ${type}`)
+      for (let i = 0, j = input.target.length; i < j; i++) {
+        str += await fetchDetail(input.target[i])
+
+        if (i !== input.target.length - 1) {
+          str += '\n--------------------\n'
+        }
+      }
+
+      await ctx.reply(str, { parse_mode: 'Markdown' })
+    }
+
+    logger.success(`Reply: coin -> ${JSON.stringify(input)}`)
   })
 }
