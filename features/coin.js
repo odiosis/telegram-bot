@@ -1,9 +1,9 @@
 const Axios = require('axios')
 const logger = require('../lib/logger')
 
-const api = `https://data.gateio.io/api2/1/ticker`
+const api = `https://data.gateio.io/api2/1`
 
-function parseInput (ctx) {
+async function parseInput (ctx) {
   const params = ctx.message.text.toLowerCase().split(' ')
   console.log('params', params)
   const len = params.length
@@ -12,14 +12,17 @@ function parseInput (ctx) {
   if (len === 2) {
     const coins = params[1]
 
-    if (coins.includes(',') ||
-        coins.includes('，') ||
-        coins.includes('、')
+    if (
+      coins.includes(',') ||
+      coins.includes('，') ||
+      coins.includes('、')
     ) {
       opts.target = coins.split(/,|，|、/)
     } else {
       opts.target = [coins]
     }
+  } else if (len === 1) {
+    opts.target = await fetchTop10Type()
   } else {
     throw new Error('not supported syntax')
   }
@@ -27,8 +30,29 @@ function parseInput (ctx) {
   return opts
 }
 
+async function fetchTop10Type () {
+  const { data } = await Axios.get(`${api}/marketlist`)
+
+  if (data.result !== 'true') {
+    throw new Error(data.message)
+  }
+
+  const allCoinDetail = data.data
+
+  allCoinDetail.sort((prev, next) => {
+    const prevValue = String(prev.marketcap).replace(/,/g, '')
+    const nextValue = String(next.marketcap).replace(/,/g, '')
+
+    return Number(nextValue) - Number(prevValue)
+  })
+
+  const top10 = allCoinDetail.map(coin => coin.symbol).slice(0, 10)
+
+  return [...top10, 'GXS']
+}
+
 async function fetchDetail (type) {
-  const { data } = await Axios.get(`${api}/${type}_usdt`)
+  const { data } = await Axios.get(`${api}/ticker/${type}_usdt`)
 
   if (data.result === 'false') {
     return `${type}:\n${data.message}`
@@ -36,17 +60,15 @@ async function fetchDetail (type) {
 
   const { last, percentChange } = data
 
-  return `${type.toUpperCase()}:\n最新成交价：*$${last}*;\n24小时变化量：${percentChange.toFixed(
-    2
-  )}%`
+  return `${type.toUpperCase()}:\n最新成交价：*$${last}*;\n24小时变化量：${Number(percentChange).toFixed(2)}%`
 }
 
-module.exports = function (bot) {
+module.exports = async function (bot) {
   bot.command('/coin', async ctx => {
     let input
 
     try {
-      input = parseInput(ctx)
+      input = await parseInput(ctx)
     } catch (error) {
       ctx.reply('Oooops, parsing failed')
       console.error(error)
