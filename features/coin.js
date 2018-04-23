@@ -12,9 +12,10 @@ function parseInput (ctx) {
   if (len === 2) {
     const coins = params[1]
 
-    if (coins.includes(',') ||
-        coins.includes('，') ||
-        coins.includes('、')
+    if (
+      coins.includes(',') ||
+      coins.includes('，') ||
+      coins.includes('、')
     ) {
       opts.target = coins.split(/,|，|、/)
     } else {
@@ -36,9 +37,7 @@ async function fetchDetail (type) {
 
   const { last, percentChange } = data
 
-  return `${type.toUpperCase()}:\n最新成交价：*$${last}*;\n24小时变化量：${percentChange.toFixed(
-    2
-  )}%`
+  return `${type.toUpperCase()}:\n最新成交价：*$${last}*;\n24小时变化量：${Number(percentChange).toFixed(2)}%`
 }
 
 module.exports = function (bot) {
