@@ -14,6 +14,7 @@ const helper = `
 /translate [text]: 翻译 text
 /rss: 获取预设博客的 rss
 /meme [text]: 表情包 text
+/fund [code]: 获取 code 基金的信息
 `
 
 const help = async ctx => {

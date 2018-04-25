@@ -41,11 +41,12 @@
   "homepage": "https://github.com/odiosis/telegram-bot#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "chalk": "^2.3.2",
+    "chalk": "^2.4.0",
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^5.0.1",
     "fecha": "^2.3.3",
     "google-translate-api": "^2.3.0",
+    "html2json": "^1.0.2",
     "pm2": "^2.10.2",
     "query-string": "^6.0.0",
     "rss-parser": "^3.1.2",
@@ -54,11 +55,11 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-friendly-formatter": "^4.0.0",
-    "eslint-plugin-import": "^2.10.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-standard": "^3.1.0",
     "nodemon": "^1.17.3",
     "pre-commit": "^1.2.2"
   }
