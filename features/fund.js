@@ -2,6 +2,7 @@ const queryString = require('query-string')
 const Axios = require('axios')
 const html2json = require('html2json').html2json
 const logger = require('../lib/logger')
+const fundcode = require('../utils/fundcode')
 
 const axios = Axios.create({
   baseURL: 'http://fund.eastmoney.com'
@@ -39,7 +40,9 @@ const map = bot => {
         }
       })
 
-    const reply = `[基金编号：<b>${code}</b>]\n` +
+    const info = fundcode.find(fund => fund.find(item => item === code))
+
+    const reply = `[${info[2]}(${code}) - ${info[3]}]\n` +
       `日期：<b>${content[0]}</b>\n` +
       `净值：<b>${content[1]}</b>\n` +
       `累计净值：<b>${content[2]}</b>\n` +
