@@ -47,7 +47,7 @@
     "fecha": "^2.3.3",
     "google-translate-api": "^2.3.0",
     "html2json": "^1.0.2",
-    "pm2": "^2.10.2",
+    "pm2": "^3.0.4",
     "query-string": "^6.0.0",
     "rss-parser": "^3.1.2",
     "telegraf": "^3.20.0"
